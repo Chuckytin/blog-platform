@@ -4,5 +4,5 @@
 |  '--' /  |' '-' ' '-' ' |  | |  || '-' '| '-' '|  ||  |\ `--.\ '-'  |  |  |  |  |' '-' '|  ||  |
 `------'`--' `---'.`-  /  `--' `--'|  |-' |  |-' `--'`--' `---' `--`--'  `--'  `--' `---' `--''--'
                   `---'            `--'   `--'
-${spring.application.name} <-- v${application.version} -->
+${spring.application.name} <-- v@project.version@ -->
 Powered by Spring Boot ${spring-boot.version}
