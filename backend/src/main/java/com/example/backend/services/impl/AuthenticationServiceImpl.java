@@ -11,12 +11,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Implementación del servicio de autenticación.
+ * - Autentica al usuario mediante el email y contraseña.
+ * - Genera tokens JWT.
+ * - Valida tokens JWT y obtiene los datos del usuario.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
@@ -60,9 +66,30 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     /**
-     * Crea la clase secreta para firmar el token JWT (firma HMAC SHA-256)
+     * Valida el token JWT y obtiene el usuario asociado.
      */
-    private Key getSignKey() {
+    @Override
+    public UserDetails validateToken(String token) {
+        String username = extractUsername(token);
+        return userDetailsService.loadUserByUsername(username);
+    }
+
+    /**
+     * Extrae el username (email) desde el token JWT.
+     */
+    private String extractUsername(String token) {
+        return Jwts.parser()
+                .verifyWith(getSignKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
+
+    /**
+     * Crea la clave secreta para firmar el token JWT (firma HMAC SHA-256)
+     */
+    private SecretKey getSignKey() {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
