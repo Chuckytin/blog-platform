@@ -11,17 +11,29 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Implementación del servicio de gestión de categorías.
+ * - Lista todas las categorías con el número de posts.
+ * - Crea nuevas categorías verificando duplicados.
+ * - Elimina categorías si no tienen posts asociados.
+ */
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
 
+    /**
+     * Lista todas las categorías y la cantidad de posts asociados a cada una.
+     */
     @Override
     public List<Category> listCategories() {
         return categoryRepository.findAllWithPostCount();
     }
 
+    /**
+     * Crea una nueva categoría y lanza error si ya existe una con el mismo nombre.
+     */
     @Override
     @Transactional
     public Category createCategory(Category category) {
@@ -32,7 +44,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     }
 
+    /**
+     * Elimina una categoría por su ID si no tiene posts adicionales.
+     * Lanza error si existen posts relacionados.
+     */
     @Override
+    @Transactional
     public void deleteCategory(UUID id) {
         Optional<Category> categoryOptional = categoryRepository.findById(id);
         if (categoryOptional.isPresent()) {
