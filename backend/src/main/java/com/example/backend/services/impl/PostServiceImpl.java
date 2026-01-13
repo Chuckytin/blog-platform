@@ -30,6 +30,9 @@ public class PostServiceImpl implements PostService {
     private final CategoryService categoryService;
     private final TagService tagService;
 
+    /**
+     * Velocidad media de un usuario leyendo
+     */
     private static final int WORDS_PER_MINUTE = 200;
 
     @Override
@@ -38,6 +41,10 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new EntityNotFoundException("Post does not exist with ID: " + id));
     }
 
+    /**
+     * Recupera todos los posts publicados, permite filtrar por categoría o etiqueta.
+     * Si no se proporciona un filtro se devuelven todos los posts.
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Post> getAllPosts(UUID categoryId, UUID tagId) {
@@ -71,11 +78,18 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    /**
+     * Obtiene todos los posts en estado de DRAFT
+     */
     @Override
     public List<Post> getDraftPost(User user) {
         return postRepository.findAllByAuthorAndStatus(user, PostStatus.DRAFT);
     }
 
+    /**
+     * Crea un nuevo post y lo asocia con su autor, categoría y etiquetas.
+     * El tiempo de lectura se calcula automáticamente a partir del contenido.
+     */
     @Override
     @Transactional
     public Post createPost(User user, CreatePostRequest createPostRequest) {
@@ -98,6 +112,10 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    /**
+     * Actualiza un post existente.
+     * La categoría y las etiquetas solo se actualizar si son distintas a las actuales asociadas.
+     */
     @Override
     @Transactional
     public Post updatePost(UUID id, UpdatePostRequest updatePostRequest) {
@@ -129,6 +147,15 @@ public class PostServiceImpl implements PostService {
 
     }
 
+    @Override
+    public void deletePost(UUID id) {
+        Post post = getPost(id);
+        postRepository.delete(post);
+    }
+
+    /**
+     * Calcula el tiempo estimado de lectura de un contenido.
+     */
     private Integer calculateReadingTime(String content) {
         if (content == null || content.isEmpty()) {
             return 0;
