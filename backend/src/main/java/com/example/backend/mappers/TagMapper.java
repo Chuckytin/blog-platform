@@ -38,7 +38,7 @@ public interface TagMapper {
             return 0;
         }
         return (int) posts.stream()
-                .filter(post -> PostStatus.PUBLISHED.equals(post.getPostStatus()))
+                .filter(post -> PostStatus.PUBLISHED.equals(post.getStatus()))
                 .count();
     }
 

@@ -31,7 +31,7 @@ public class Post {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private PostStatus postStatus;
+    private PostStatus status;
 
     @Column(nullable = false)
     private Integer readingTime;
@@ -70,18 +70,18 @@ public class Post {
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(content, post.content) && postStatus == post.postStatus && Objects.equals(readingTime, post.readingTime) && Objects.equals(createdAt, post.createdAt) && Objects.equals(updateAt, post.updateAt);
+        return Objects.equals(id, post.id) && Objects.equals(title, post.title) && Objects.equals(content, post.content) && status == post.status && Objects.equals(readingTime, post.readingTime) && Objects.equals(createdAt, post.createdAt) && Objects.equals(updatedAt, post.updatedAt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, content, postStatus, readingTime, createdAt, updateAt);
+        return Objects.hash(id, title, content, status, readingTime, createdAt, updatedAt);
     }
 
     /**
@@ -92,7 +92,7 @@ public class Post {
     protected void onCreated() {
         LocalDateTime now = LocalDateTime.now();
         this.createdAt = now;
-        this.updateAt = now;
+        this.updatedAt = now;
     }
 
     /**
@@ -101,7 +101,7 @@ public class Post {
      */
     @PreUpdate
     protected void onUpdate() {
-        this.updateAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
 }

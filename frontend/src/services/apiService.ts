@@ -44,7 +44,7 @@ export interface CreatePostRequest {
   content: string;
   categoryId: string;
   tagIds: string[];
-  status: PostStatus;
+  status?: PostStatus;
 }
 
 export interface UpdatePostRequest extends CreatePostRequest {
