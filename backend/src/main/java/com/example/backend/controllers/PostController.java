@@ -1,13 +1,16 @@
 package com.example.backend.controllers;
 
 import com.example.backend.domain.CreatePostRequest;
+import com.example.backend.domain.UpdatePostRequest;
 import com.example.backend.domain.dtos.CreatePostRequestDto;
 import com.example.backend.domain.dtos.PostDto;
+import com.example.backend.domain.dtos.UpdatePostRequestDto;
 import com.example.backend.domain.entities.Post;
 import com.example.backend.domain.entities.User;
 import com.example.backend.mappers.PostMapper;
 import com.example.backend.services.PostService;
 import com.example.backend.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +53,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostDto> createPost(
-            @RequestBody CreatePostRequestDto createPostRequestDto,
+            @Valid @RequestBody CreatePostRequestDto createPostRequestDto,
             @RequestAttribute UUID userId
             ) {
 
@@ -61,6 +64,27 @@ public class PostController {
         PostDto createdPostDto = postMapper.toDto(createdPost);
 
         return new ResponseEntity<>(createdPostDto, HttpStatus.CREATED);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<PostDto> updatePost(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdatePostRequestDto updatePostRequestDto
+            ) {
+
+        UpdatePostRequest updatePostRequest = postMapper.toUpdatePostRequest(updatePostRequestDto);
+        Post updatePost = postService.updatePost(id, updatePostRequest);
+        PostDto updatedPostDto = postMapper.toDto(updatePost);
+
+        return ResponseEntity.ok(updatedPostDto);
+    }
+
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<PostDto> getPost(@PathVariable UUID id) {
+
+        Post post = postService.getPost(id);
+        PostDto postDto = postMapper.toDto(post);
+        return ResponseEntity.ok(postDto);
     }
 
 }
