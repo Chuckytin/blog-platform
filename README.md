@@ -7,10 +7,18 @@ Versión: **1.0.0**
 
 ## Tecnologías
 
+### Backend
 - Java 21, Spring Boot 4.0.1  
-- PostgreSQL + Docker  
+- PostgreSQL (Docker)  
 - Spring Security + JWT  
-- H2 (desarrollo), Lombok, MapStruct  
+- JPA/Hibernate, Lombok, MapStruct  
+- H2 (solo para desarrollo)  
+
+### Frontend
+- React 18 + Vite  
+- TailwindCSS  
+- NextUI, TipTap, Framer Motion  
+- React Router DOM   
 
 ---
 
