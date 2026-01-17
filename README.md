@@ -42,7 +42,7 @@ docker-compose up -d
 
 ## Variables de entorno Docker:
 ```
-POSTGRES_DB=blog_db
+POSTGRES_DB=blog_application_db
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=1234
 ```
